@@ -1,11 +1,11 @@
-package AtCoder.begin357;
+package AtCoder.abc357;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class A {
+public class B {
     static final FastReader sc = new FastReader();
 
     public static void main(String[] args) {
@@ -16,18 +16,14 @@ public class A {
     }
 
     static void solve() {
-        int n = sc.nextInt();
-        int total = sc.nextInt();
-        int[] a = new int[n];
-        for (int i = 0; i < n; i++) {
-            a[i] = sc.nextInt();
+        String s = sc.next();
+        int l = 0, u = 0;
+        for(char c : s.toCharArray()){
+            if(Character.isUpperCase(c)) u++;
+            else if(Character.isLowerCase(c)) l++;
         }
-        int i = 0;
-        for (; i < n; i++) {
-            total -= a[i];
-            if(total < 0) break;
-        }
-        System.out.println(i);
+        if(u > l) System.out.println(s.toUpperCase());
+        else System.out.println(s.toLowerCase());
     }
 
     static class FastReader {

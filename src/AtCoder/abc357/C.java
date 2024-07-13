@@ -1,11 +1,11 @@
-package AtCoder.begin357;
+package AtCoder.abc357;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class B {
+public class C {
     static final FastReader sc = new FastReader();
 
     public static void main(String[] args) {
@@ -16,14 +16,37 @@ public class B {
     }
 
     static void solve() {
-        String s = sc.next();
-        int l = 0, u = 0;
-        for(char c : s.toCharArray()){
-            if(Character.isUpperCase(c)) u++;
-            else if(Character.isLowerCase(c)) l++;
+        int n = sc.nextInt();
+        String[] carpet = createCarpet(n);
+        for (String line : carpet) {
+            System.out.println(line);
         }
-        if(u > l) System.out.println(s.toUpperCase());
-        else System.out.println(s.toLowerCase());
+    }
+
+    static String[] createCarpet(int N) {
+        if (N == 0) {
+            return new String[]{"#"};
+        }
+        String[] smallerCarpet = createCarpet(N - 1);
+        int smallerSize = smallerCarpet.length;
+        int newSize = 3 * smallerSize;
+        String[] newCarpet = new String[newSize];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                for (int r = 0; r < smallerSize; r++) {
+                    if (newCarpet[i * smallerSize + r] == null) {
+                        newCarpet[i * smallerSize + r] = "";
+                    }
+                    if (i == 1 && j == 1) {
+                        newCarpet[i * smallerSize + r] += ".".repeat(smallerSize);
+                    } else {
+                        newCarpet[i * smallerSize + r] += smallerCarpet[r];
+                    }
+                }
+            }
+        }
+
+        return newCarpet;
     }
 
     static class FastReader {
@@ -68,5 +91,4 @@ public class B {
             return str;
         }
     }
-
 }

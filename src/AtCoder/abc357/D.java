@@ -1,4 +1,4 @@
-package AtCoder.begin357;
+package AtCoder.abc357;
 
 import java.io.BufferedReader;
 import java.io.IOException;
