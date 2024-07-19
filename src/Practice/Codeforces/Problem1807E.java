@@ -1,4 +1,4 @@
-package Codeforces.Codeforces959;
+package Practice.Codeforces;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class B {
+public class Problem1807E {
     static final FastReader sc = new FastReader();
     static final int P_INF = Integer.MAX_VALUE;
     static final int N_INF = Integer.MIN_VALUE;
@@ -25,31 +25,43 @@ public class B {
 
     static void solve() {
         int n = sc.nextInt();
-        String s = sc.nextLine();
-        String t = sc.nextLine();
-        if(s.equals(t)){
-            yeah(); return;
+        int[] a = _inpArr(n);
+        long[] pfx = new long[n + 1];
+        for(int i = 0; i < n; i++){
+            pfx[i + 1] = pfx[i] + a[i];
         }
-        int oneIdx = n;
-        for (int j = 0; j < n; j++) {
-            if (s.charAt(j) == '1') {
-                oneIdx = j;
-                break;
-            }
-        }
-        for (int i = 0; i < n; i++) {
-            if (s.charAt(i) == t.charAt(i)) {
-                continue;
-            }
-            if (s.charAt(i) == '0')
-                if (i < oneIdx) {
-                    nope();
+        int l = 0, r = n - 1;
+        do{
+            int mid = l - (l - r) / 2;
+            int eltsLeft = mid - l + 1;
+            long answer = queryFromJudge(eltsLeft, l, mid);
+            long expected = pfx[mid + 1] - pfx[l];
+            if(answer == expected){
+                //Not found here
+                //Check right
+                l = mid + 1;
+            } else {
+                //this half contains
+                r = mid;
+                if(l == r){
+                    System.out.println("! " + (l + 1));
                     return;
-                } else {
-                    continue;
                 }
+            }
+            //QueryRightHalf
+        }while (l <= r);
+    }
+
+    private static long queryFromJudge(int elements, int l, int r) {
+        StringBuilder query = new StringBuilder("? ");
+        query.append(elements).append(" ");
+        for(int i = l; i <= r; i++){
+            query.append((i+1)).append(" ");
         }
-        yeah();
+        System.out.println(query);
+        System.out.flush();
+        long answer = sc.nextLong();
+        return answer;
     }
 
     static void yeah() {

@@ -1,4 +1,4 @@
-package Codeforces.Codeforces959;
+package Practice.Codeforces;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -8,9 +8,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-public class B {
+public class Problem1989C {
     static final FastReader sc = new FastReader();
     static final int P_INF = Integer.MAX_VALUE;
     static final int N_INF = Integer.MIN_VALUE;
@@ -25,31 +27,32 @@ public class B {
 
     static void solve() {
         int n = sc.nextInt();
-        String s = sc.nextLine();
-        String t = sc.nextLine();
-        if(s.equals(t)){
-            yeah(); return;
-        }
-        int oneIdx = n;
-        for (int j = 0; j < n; j++) {
-            if (s.charAt(j) == '1') {
-                oneIdx = j;
-                break;
+        int[] a = _inpArr(n);
+        int[] b = _inpArr(n);
+        int oneDecide = 0, minusOneDecide = 0;
+        int ratA = 0, ratB = 0;
+        for(int i = 0; i < n; i++){
+            if(a[i] == b[i]){
+                if(a[i] == 0) {}
+                else if(a[i] == 1) oneDecide++;
+                else minusOneDecide++;
+            } else {
+                if(a[i] == 1) ratA++;
+                else if(b[i] == 1) ratB++;
             }
         }
-        for (int i = 0; i < n; i++) {
-            if (s.charAt(i) == t.charAt(i)) {
-                continue;
-            }
-            if (s.charAt(i) == '0')
-                if (i < oneIdx) {
-                    nope();
-                    return;
-                } else {
-                    continue;
-                }
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        pq.offer(ratA); pq.offer(ratB);
+        while(oneDecide-->0){
+            pq.offer(pq.poll()+1);
         }
-        yeah();
+        PriorityQueue<Integer> large = new PriorityQueue<>(Collections.reverseOrder());
+        large.addAll(pq);
+        while(minusOneDecide-->0){
+            large.offer(large.poll()-1);
+        }
+        large.poll();
+        System.out.println(large.poll());
     }
 
     static void yeah() {

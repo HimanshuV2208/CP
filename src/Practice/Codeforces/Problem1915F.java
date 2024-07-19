@@ -1,4 +1,4 @@
-package Codeforces.Codeforces959;
+package Practice.Codeforces;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -7,49 +7,65 @@ import static java.lang.Math.abs;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class B {
+public class Problem1915F {
     static final FastReader sc = new FastReader();
     static final int P_INF = Integer.MAX_VALUE;
     static final int N_INF = Integer.MIN_VALUE;
     static final int MOD = 1_000_000_007;
+    static long ans = 0;
 
     public static void main(String[] args) {
         int t = sc.nextInt();
         while (t-- > 0) {
+            ans = 0;
             solve();
         }
     }
 
     static void solve() {
+        List<int[]> intervals = new ArrayList<>();
         int n = sc.nextInt();
-        String s = sc.nextLine();
-        String t = sc.nextLine();
-        if(s.equals(t)){
-            yeah(); return;
-        }
-        int oneIdx = n;
-        for (int j = 0; j < n; j++) {
-            if (s.charAt(j) == '1') {
-                oneIdx = j;
-                break;
-            }
-        }
         for (int i = 0; i < n; i++) {
-            if (s.charAt(i) == t.charAt(i)) {
-                continue;
-            }
-            if (s.charAt(i) == '0')
-                if (i < oneIdx) {
-                    nope();
-                    return;
-                } else {
-                    continue;
-                }
+            intervals.add(new int[]{sc.nextInt(), sc.nextInt()});
         }
-        yeah();
+        intervals.sort(Comparator.comparingInt(a -> a[1]));
+        int[] arr = new int[n];
+        int c = 0;
+        for (int[] interval : intervals){
+            arr[c++] = interval[0];
+        }
+        mergeSort(arr, 0, n-1);
+        System.out.println(ans);
+    }
+
+    static void mergeSort(int[] arr, int l, int r){
+        if(l < r){
+            int mid = l - (l - r)/2;
+            mergeSort(arr, l, mid);
+            mergeSort(arr, mid + 1, r);
+            merge(arr, l, mid, r);
+        }
+    }
+
+    static void merge(int[] arr, int l, int mid, int r){
+        int n1 = mid - l + 1, n2 = r - mid;
+        int[] a = new int[n1], b = new int[n2];
+        for(int i = l; i <= r; i++){
+            if(i <= mid) a[i - l] = arr[i];
+            else b[i - mid - 1] = arr[i];
+        }
+        int i = 0, j = 0, k = l;
+        while(i < n1 && j < n2){
+            if(a[i] <= b[j]) arr[k++] = a[i++];
+            else {
+                ans += n1 - i;
+                arr[k++] = b[j++];
+            }
+        }
+        while(i < n1) arr[k++] = a[i++];
+        while(j < n2) arr[k++] = b[j++];
     }
 
     static void yeah() {
